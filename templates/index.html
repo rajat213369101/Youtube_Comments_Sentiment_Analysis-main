@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentiment Analysis</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: rgb(0 0 0);
+            color: #f5eded;
+            font-family: "Poppins", sans-serif;
+        }
+
+        .form {
+            background-image: linear-gradient(90deg, rgba(0, 0, 0, 0.7316176470588236) 0%, rgba(0, 0, 0, 0.7428221288515406) 35%, rgba(0, 0, 0, 0.7344187675070029) 100%), url("https://www.qdegrees.com/uploads/newsletter-img/sentiment-analysis-deep-dive-into-how-your-customers-feel.jpg");
+            background-position: center;
+            background-size: cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 260px;
+        }
+
+        .form h1 {
+            margin-bottom: 23px;
+            font-size: 42px;
+        }
+
+        .form form label {
+            font-size: 28px;
+            margin-right: 12px;
+        }
+
+        .form form {
+            display: flex;
+            align-items: center;
+
+        }
+
+        .form form input {
+            height: 29px;
+            width: 303px;
+            background-color: gray;
+            background: transparent;
+            color: white;
+            border: 1px solid rgb(197, 197, 197);
+            border-radius: 5px;
+            margin-right: 12px;
+        }
+
+        .form form button {
+            font-size: 20px;
+            width: 99px;
+            height: 41px;
+            border-radius: 20px;
+            background-color: #950101;
+            color: rgb(244, 243, 240);
+            border: none;
+            cursor: pointer;
+
+        }
+
+        .grey {
+            background-color: rgb(35, 35, 35);
+            height: 8px;
+        }
+
+        .form form button:hover {
+            background-color: #ff0000;
+            box-shadow: -3px 1px 15px 6px #861313;
+        }
+
+        .channel {
+            display: flex;
+            /* flex-wrap: wrap; */
+            /* background-color: #ff0000; */
+            margin-top: 40px;
+            margin-bottom: 30px;
+        }
+
+        .cinfo {
+            font-size: 42px;
+            margin-left: 34px;
+            margin-top: 40px;
+        }
+
+        .img {
+            width: 210px;
+            height: 209px;
+            margin-left: 56px;
+            /* margin: 24px 56px 23px 181px; */
+            background-color: #f5eded;
+        }
+
+        .img img {
+            width: 100%;
+        }
+
+        .channeldesc {
+            display: flex;
+            flex-direction: column;
+            /* align-items: center; */
+            justify-content: center;
+            margin-left: 50px;
+        }
+
+        .chtitle {
+            font-size: 38px;
+            font-weight: 600;
+        }
+
+        .ch1 {
+            /* background-color: red; */
+            margin: auto;
+            display: flex;
+        }
+
+        .chdesc {
+            margin-top: 10px;
+            font-size: 18px;
+        }
+
+        .counts {
+            margin: 34px 0px 90px 181px;
+            /* margin-left: 181px;
+            margin-top: 34px;
+            margin-bottom: 90px; */
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 60px;
+            font-size: 28px;
+        }
+
+        .senti {
+            margin-top: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 170px;
+            margin-bottom: 70px;
+        }
+
+        .senti h2 {
+            font-size: 42px;
+            margin-left: 32px;
+        }
+
+        .imgsenti {
+            width: 548px;
+            height: 428px;
+            margin-top: 45px;
+            background-color: white;
+        }
+
+        .imgsenti img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .iframe {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 70px;
+        }
+
+        .iframe iframe {
+            width: 54%;
+            height: 430px;
+        }
+
+        .suggested-comments {
+            width: 94vw;
+            margin: auto;
+            overflow: auto;
+            padding: 10px;
+        }
+
+        .suggested-comments.hidden {
+            display: none;
+            /* Hide comments by default */
+        }
+
+        .suggested-comments div {
+            margin-bottom: 10px;
+            background-color: #2d2d2d;
+            color: #f5eded;
+            /* height: 20px; */
+            display: flex;
+            align-items: center;
+            padding: 13px;
+        }
+
+        .toggle-comments {
+            cursor: pointer;
+            height: 70px;
+            width: 70vw;
+            margin-left: 42px;
+            margin-top: 45px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #2d2d2d;
+            font-size: 42px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            padding: 15px;
+            color: #f5eded;
+            /* font-family: "Poppins", sans-serif; */
+        }
+
+        .toggle-comments span{
+            font-size: 65px;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings:
+                'FILL' 0,
+                'wght' 400,
+                'GRAD' 0,
+                'opsz' 24
+        }
+
+
+        @media (max-width: 1250px) {
+            .counts {
+                margin: auto;
+                grid-template-columns: 1fr;
+            }
+
+            .publish,
+            .subcount,
+            .totalview {
+                text-align: center;
+            }
+
+            .senti {
+                flex-wrap: wrap;
+            }
+
+            .ch1 {
+                flex-wrap: wrap;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .countsec div {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+
+        }
+
+        @media (max-width: 580px) {
+
+            .form form {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="form">
+        <h1>Sentiment Analysis of YouTube Comments</h1>
+        <form method="POST">
+            <label for="video_url">Enter YouTube Video URL:</label>
+            <input type="text" name="youtube_link" id="youtube_link" required>
+            <button type="submit">Analyze</button>
+        </form>
+    </div>
+    <div class="grey"></div>
+    {% if error_message %}
+    <p style="color: red;">{{ error_message }}</p>
+    {% endif %}
+    {% if channel_info %}
+    <h2 class="cinfo">Channel Information:</h2>
+    <div class="channel">
+        <div class="ch1">
+            <div class="channelinfo">
+                <div class="img">
+                    <img src="{{ channel_info.channel_logo_url }}" alt="Channel Logo">
+                </div>
+            </div>
+            <div class="channeldesc">
+                <p class="chtitle"><strong>Channel:</strong> {{ channel_info.channel_title }}</p>
+                <p class="chdesc"><strong>Description:</strong> {{ channel_info.channel_description }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="counts">
+        <div class="publish">
+            <strong>Channel Published At:</strong>
+            <p>{{ channel_info.channel_created_date}}</p>
+        </div>
+        <div class="subcount">
+            <strong>Subscriber Count:</strong>
+            <p>{{ channel_info.subscriber_count }}</p>
+        </div>
+        <div class="totalview">
+            <strong>Total Videos</strong>
+            <p>{{ channel_info.video_count }}</p>
+        </div>
+    </div>
+    {% endif %}
+    {% if stats %}
+    <h3 class="cinfo">Video Information</h3>
+    <div class="counts countsec">
+        <div>
+            <strong>Total Views</strong>
+            <p class="counter-numbers" data-number="{{ stats.viewCount }}">0</p>
+        </div>
+        <div>
+            <strong>Likes</strong>
+            <p class="counter-numbers" data-number="{{ stats.likeCount }}">0</p>
+        </div>
+        <div>
+            <strong>Comments</strong>
+            <p>{{ stats.commentCount }}</p>
+        </div>
+        <!-- <tr>
+                    <th scope="row">Video Link</th>
+                    <td><a href="{{youtube_link}}" target="_blank">Watch Now</a></td>
+                </tr> -->
+    </div>
+    <div class="iframe">
+        <iframe class="embed-responsive-item" width="560" height="315"
+            src="https://www.youtube.com/embed/{{ video_id }}" title="YouTube video player" frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen>
+        </iframe>
+    </div>
+    {% endif %}
+    <div class="grey"></div>
+
+    <!-- Display counts -->
+    {% if results %}
+    <h3 class="cinfo">Sentiment Analysis</h3>
+    <div class="counts countsec">
+        <div>
+            <strong>Positive Comments:</strong>
+            <p>{{results.num_positive}}</p>
+        </div>
+        <div>
+            <strong>Negative Comments:</strong>
+            <p>{{results.num_negative}}</p>
+        </div>
+        <div>
+            <strong>Neutral Comments:</strong>
+            <p>{{results.num_neutral}}</p>
+        </div>
+    </div>
+    {% endif %}
+    <div class="grey"></div>
+    {% if bar_chart_image or pie_chart_image %}
+    <h3 class="cinfo">Bar Chart & Pie Chart</h3>
+    <div class="senti">
+        <div class="imgsenti">
+            <img src="{{bar_chart_image}}" alt="Sentiment Analysis Chart">
+        </div>
+        <div class="imgsenti">
+            <img src="{{pie_chart_image}}" alt="Sentiment Analysis Chart">
+        </div>
+    </div>
+    {% endif %}
+    <div class="grey"></div>
+    {% if suggested_comments %}
+    <div class="toggle-comments " onclick="toggleComments()">Comments
+        <span class="material-symbols-outlined">
+            arrow_drop_down
+            </span></div>
+    <div class="suggested-comments hidden" id="suggested-comments">
+        {% for comment in suggested_comments %}
+        <div>{{ comment }}</div>
+        {% endfor %}
+        <!-- Suggested comments will be dynamically inserted here -->
+    </div>
+    {% endif %}
+
+    <script>
+
+        // Function to toggle visibility of suggested comments
+        function toggleComments() {
+            var commentsDiv = document.getElementById('suggested-comments');
+            commentsDiv.classList.toggle('hidden');
+        }
+        const countssection = document.querySelector(".countsec");
+
+        const workObserver = new IntersectionObserver((entries, observer) => {
+            const [entry] = entries;
+            console.log(entry)
+
+            // if(entry.isIntersecting == false)
+            if (!entry.isIntersecting) return;
+
+            const counterNum = document.querySelectorAll(".counter-numbers");
+
+            const speed = 200;
+            counterNum.forEach((curelement) => {
+                const updateNumber = () => {
+                    const targetNumber = parseInt(curelement.dataset.number);
+                    // console.log(targetNumber)
+                    const initialNum = parseInt(curelement.innerText);
+                    // console.log(initialNum)
+                    const incrementNumber = Math.trunc(targetNumber / speed)
+                    // console.log(incrementNumber)
+
+                    if (initialNum < targetNumber) {
+                        curelement.innerText = initialNum + incrementNumber;
+
+                        setTimeout(updateNumber, 10);
+                    } else {
+                        curelement.innerText = targetNumber; // Set the final number when the animation is complete
+                    }
+
+
+                };
+
+                updateNumber();
+            });
+
+            observer.unobserve(countssection);
+        }, {
+            root: null,
+            threshold: 0,
+        });
+
+        workObserver.observe(countssection);
+    </script>
+</body>
+
+</html>
